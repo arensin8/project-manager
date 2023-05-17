@@ -1,16 +1,18 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const {default : mongoose} = require('mongoose');
 const http = require('http');
 const path = require('path');
+const { AllRoutes } = require('./router/router');
+const router = require('./router/router');
 
 module.exports = class Application{
     #express = require('express');
     #app = express();
     constructor(PORT,DB_URL){
-        this.confidDatabase(DB_URL);
+        this.configDatabase(DB_URL);
         this.configApplication();
         this.createServer(PORT);
-        this.confidRoutes();
+        this.configRoutes();
         this.errorHnadler();
     }
     configApplication(){
@@ -24,11 +26,10 @@ module.exports = class Application{
             console.log(`server run on http://localhost:${PORT}`);
         })
     }
-    confidDatabase(DB_URL){
-        mongoose.connect(DB_URL , (error) => {
-            if(error) throw error
-            return console.log('connected to mongodb');
-        })
+    configDatabase(DB_URL){
+        mongoose.connect(DB_URL ,{}).then(() => {
+             console.log('connected to mongodb');
+        }) 
     }
     errorHnadler(){
         this.#app.use((req,res,next)=>{
@@ -48,11 +49,18 @@ module.exports = class Application{
             }) 
         })
     }
-    confidRoutes(){
+    configRoutes(){
         this.#app.get('/' , (req,res,next) => {
             res.json({
                 message : 'this is a new application'
             })
         })
+        this.#app.use(AllRoutes);
+        // this.#app.use((err,req,res,next) => {
+        //     try {
+        //     } catch (error) {
+        //         next(err)
+        //     }
+        // })
     }
 }
