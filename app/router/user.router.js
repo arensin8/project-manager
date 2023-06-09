@@ -12,5 +12,9 @@ router.post("/upload-image", checkLogin,  uploadMulter.single("image") , imageVa
 
 
 module.exports = {
+  UserRoutes : router
+}
+
+module.exports = {
   UserRoutes: router,
 };
