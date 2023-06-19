@@ -20,6 +20,18 @@ Content-Type: application/json
 
 
 ###remove project
-Delete http://localhost:3000/project/remove/6482da1cb446dec3b14c840c
+DELETE  http://localhost:3000/project/remove/6482da1cb446dec3b14c840c
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
+
+
+###edit project
+PUT  http://localhost:3000/project/edit/6482da1cb446dec3b14c840c
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+{
+    "title":"",
+    "text":"",
+    "tags": ["tag1","tag3"]
+}
