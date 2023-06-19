@@ -8,3 +8,18 @@ Content-Type: application/json
     "title": "New project creating",
     "text":"This is a new project which is created by me"
 }
+
+###get project by id
+GET  http://localhost:3000/project/6482f2cd5e4ce2683534f1a4
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+###get all project
+GET  http://localhost:3000/project/list
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+
+###remove project
+Delete http://localhost:3000/project/remove/6482da1cb446dec3b14c840c
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json

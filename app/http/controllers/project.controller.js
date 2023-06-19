@@ -1,39 +1,86 @@
+const autoBind = require("auto-bind");
 const { ProjectModel } = require("../../model/project.model");
+const { userModel } = require("../../model/user.model");
 
 class ProjectController {
-    async createProject(req, res, next){
-        try {
-          const {title, text ,tags,image} = req.body;
-          const owner = req.user._id
-          const result = await ProjectModel.create({title, text, owner, image ,tags})
-          if(!result) throw {status : 400, message : "Project isnt created"}
-          return res.status(201).json({
-            status : 201,
-            success: true,
-            message : "Project created successfully"
-          })
-        } catch (error) {
-          next(error)
-        }
-      }
-  async getAllPRojects(req,res,next) {
+  constructor(){
+    autoBind(this)
+  }
+  async createProject(req, res, next) {
     try {
-        const owner = req.user._id;
-        const projects = await ProjectModel.find({owner})
-        return res.status(200).json({
-            status:200,
-            success:true,
-            projects
-        })
+      const { title, text, tags, image } = req.body;
+      const owner = req.user._id;
+      const result = await ProjectModel.create({
+        title,
+        text,
+        owner,
+        image,
+        tags,
+      });
+      if (!result) throw { status: 400, message: "Project isnt created" };
+      return res.status(201).json({
+        status: 201,
+        success: true,
+        message: "Project created successfully",
+      });
     } catch (error) {
-        next(error)
+      next(error);
     }
   }
-  getProjectById() {}
+  async getAllPRojects(req, res, next) {
+    try {
+      const owner = req.user._id;
+      const projects = await ProjectModel.find({ owner });
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        projects,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findProject(owner, projectID) {
+    const project = await userModel.findOne({ owner, _id: projectID });
+    if (!project) throw { status: 400, message: "Project not found" };
+    return project;
+  }
+
+  async getProjectById(req, res, next) {
+    try {
+      const owner = req.user._id;
+      const projectID = req.params.id;
+      const project = await this.findProject(owner,projectID);
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        project
+      });
+    } catch (error) {
+      console.log(error)
+      next(error);
+    }
+  }
+  async removeProject(req,res,next) {
+    try {
+      const owner = req.user._id;
+        const projectID = req.params.id;
+        await this.findProject(owner,projectID);
+        const deleteProjectResult = await userModel.deleteOne({_id:projectID});
+        if(deleteProjectResult.deletedCount ==0) throw {status:400,message:'project isnt deleted'}
+        return res.status(200).json({
+          status:200,
+          success:true,
+          message:'project deleted'
+        })
+    } catch (error) {
+      next(error)
+    }
+  }
   getAllProjectOfTeam() {}
   getProjectOfUser() {}
   updateProject() {}
-  removeProject() {}
 }
 
 module.exports = {
