@@ -1,20 +1,19 @@
 ###create project
-Post http://localhost:3000/project/create
+Post http://localhost:3000/team/create
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
 
 {
-    "title": "New project creating",
-    "text":"This is a new project which is created by me"
+    "name": "New project creating",
+    "description":"This is a new project which is created by me",
+    "username" : "rtuw wj"
 }
 
 ###get project by id
-GET  http://localhost:3000/project/6482f1efd83e275584f044ab
+GET  http://localhost:3000/project/6482f2cd5e4ce2683534f1a4
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
-
-
 ###get all project
 GET  http://localhost:3000/project/list
 Authorization: Bearer {{$dotenv token}}
@@ -28,12 +27,12 @@ Content-Type: application/json
 
 
 ###edit project
-PUT  http://localhost:3000/project/edit/6482f1efd83e275584f044ab
+PUT  http://localhost:3000/project/edit/6482da1cb446dec3b14c840c
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
 {
     "title":"",
     "text":"",
-    "tags": ["tag1","tag4"]
+    "tags": ["tag1","tag3"]
 }
