@@ -1,27 +1,34 @@
-###create project
+###create team
 Post http://localhost:3000/team/create
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
 
 {
-    "name": "New project creating",
-    "description":"This is a new project which is created by me",
-    "username" : "rtuw wj"
+    "name": "Second team",
+    "description":"second des ",
+    "username" : "third"
 }
 
-###get project by id
-GET  http://localhost:3000/project/6482f2cd5e4ce2683534f1a4
-Authorization: Bearer {{$dotenv token}}
-Content-Type: application/json
-###get all project
-GET  http://localhost:3000/project/list
+###get team by id
+GET  http://localhost:3000/team/6492e1f89dfb2a468bb694c0
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
 
-###remove project
-DELETE  http://localhost:3000/project/remove/6482da1cb446dec3b14c840c
+###get all teams
+GET  http://localhost:3000/team/list
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+###get my teams
+GET  http://localhost:3000/team/me
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+
+###remove team
+DELETE  http://localhost:3000/team/remove/6492e1f89dfb2a468bb694c0
 Authorization: Bearer {{$dotenv token}}
 Content-Type: application/json
 
