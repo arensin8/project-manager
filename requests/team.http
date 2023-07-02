@@ -43,3 +43,8 @@ Content-Type: application/json
     "text":"",
     "tags": ["tag1","tag3"]
 }
+
+###invite user to team
+GET http://localhost:3000/team/invite/6495ffd553b4fd6bb36b0606/aren2
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
