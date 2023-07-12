@@ -55,6 +55,51 @@ class UserController{
             next(error)
         }
     }
+    async getAllRequests(req,res,next){
+        try {
+            const userID = req.user._id;
+            const inviteRequests = await userModel.findOne({userID} , {inviteRequests:1});
+            // {inviteRequests:1} --- this means that only show invite requests
+            return res.json({
+                requests : inviteRequests
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async getRequestsByStatus(req,res,next){
+        try {
+            const {status} = req.params;
+            const userID = req.user._id;
+            const requests = await userModel.aggregate([
+                {
+                    $match : {_id : userID}
+                },
+                {
+                    $project : {
+                        inviteRequests:1,
+                        _id:0,
+                        requests : {
+                            $filter: {
+                                input : '$inviteRequests',
+                                as: 'request',
+                                cond : {
+                                    $eq: ['$$request.status' , status]
+                                }
+                            }
+                        }
+                    }
+                }
+            ])
+            return res.status(200).json({
+                status:200,
+                success:true,
+                requests
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
     addSkills(){
 
     }

@@ -67,39 +67,52 @@ class TeamController {
       next(error);
     }
   }
-  async findUserInTeam(userId,teamId){
+  async findUserInTeam(teamID, userID) {
     const result = await TeamModel.findOne({
-      $or: [{ owner: userId }, { users: userId }],
-      _id: teamId,
+      $or: [{ owner: userID }, { users: userID }],
+      _id: teamID,
     });
-    return !!result
+    return !!result;
   }
+  //http:anything.com/team/invite/:teamID/:username
   async inviteUserToTeam(req, res, next) {
     try {
-      const { username, teamId } = req.params;
-      const userId = req.user._id;
-      const team = await this.findUserInTeam(userId,teamId)
+      const userID = req.user._id;
+      const { username, teamID } = req.params;
+      const team = await this.findUserInTeam(teamID, userID);
       if (!team)
-        throw { status: 400, message: "didnt find any team to invite users" };
+        throw { status: 400, message:"not found team for invitation" };
       const user = await userModel.findOne({ username });
-      if (!user) throw { status: 400, message: "didnt find user to invite" };
-      const userInvited = await this.findUserInTeam(user._id,teamId);
-      if (!userInvited) throw { status: 400, message: "user is already invited to team" };
+      if (!user)
+        throw {
+          status: 400,
+          message: "user for inviting to team isnt found",
+        };
+      const userInvited = await this.findUserInTeam(teamID, user._id);
+      if (userInvited)
+        throw {
+          status: 400,
+          message: "the user already added to team in the past",
+        };
       const request = {
         caller: req.user.username,
         requestDate: new Date(),
-        teamId,
+        teamID,
         status: "pending",
       };
-      const updateUserResult = await userModel.updateOne({username} , {
-        $push : {invitedRequests : request}
-      })
-      if(updateUserResult.modifiedCount == 0) throw{status:500 , message:'user request unsuccessful'}
-      res.status(200).json({
-        status:200,
-        success:true,
-        message : 'user request successful'
-      })
+      const updateUserResult = await userModel.updateOne(
+        { username },
+        {
+          $push: { inviteRequests: request },
+        }
+      );
+      if (updateUserResult.modifiedCount == 0)
+        throw { status: 500, message: "the invitation request isnt approved" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "your request is approved",
+      });
     } catch (error) {
       next(error);
     }

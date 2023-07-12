@@ -29,7 +29,7 @@ function createUploadPath(){
     return path.join("public","uploads",Year,Month,day)
 }
 function createLinkForFiles(fileaddress,req){
-    return  req.protocol + '://' + req.get('host') + "/" + (fileaddress.replace(/[\\\\]/gm, '/'))
+    return  fileaddress? (req.protocol + '://' + req.get('host') + "/" + (fileaddress.replace(/[\\\\]/gm, '/'))) : undefined ;
 }
 
 

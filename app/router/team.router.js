@@ -8,7 +8,7 @@ const router = require("express").Router();
 router.post('/create' , checkLogin ,createTeamValidator(), TeamController.createTeam)
 router.get('/list' , checkLogin , TeamController.getListOfTeams)
 router.get('/me' , checkLogin , TeamController.getMyTeams)
-router.get('/invite/:teamId/:username' , checkLogin , TeamController.inviteUserToTeam)
+router.get("/invite/:teamID/:username", checkLogin, TeamController.inviteUserToTeam)
 router.get('/:id' , checkLogin ,mongoIdValidator(), expressValidatorMapper, TeamController.getTeamById)
 router.delete('/remove/:id' , checkLogin ,mongoIdValidator(), expressValidatorMapper, TeamController.removeTeamById)
 

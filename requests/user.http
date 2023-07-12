@@ -14,3 +14,14 @@ Content-Type: application/json
     "last_name":"Sinaei",
     "skills":["React.js","NodeJs"]
 }
+
+###get all requests for user
+Get http://localhost:3000/user/requests
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
+
+
+###get requests by status
+Get http://localhost:3000/user/requests/accepted
+Authorization: Bearer {{$dotenv token}}
+Content-Type: application/json
